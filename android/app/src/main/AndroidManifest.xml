@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dhanush.quizapp">
-   <application
-        android:label="quizapp"
-        android:name="${applicationName}"
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:label="Quiz App"
+        android:name= "${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

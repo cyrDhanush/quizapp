@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:quizapp/models/questionmodel.dart';
 
-Future getqustions() async {
+Future getquestions() async {
   var params = {
     'amount': '10',
     'category': '28',
