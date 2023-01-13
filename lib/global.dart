@@ -24,3 +24,11 @@ TextStyle quizquestion = TextStyle(
   wordSpacing: 1.5,
   fontSize: 17,
 );
+TextStyle category_text = TextStyle(
+  color: lightcolor,
+  fontSize: 20,
+);
+
+TextStyle appbartext = TextStyle(
+  color: Colors.white,
+);

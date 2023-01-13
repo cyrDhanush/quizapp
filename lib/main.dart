@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/global.dart';
+import 'package:quizapp/screens/homepage.dart';
 import 'package:quizapp/screens/quizscreen.dart';
 import 'package:flutter/services.dart';
+import 'package:quizapp/screens/resultScreen.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -20,7 +22,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: orange,
         fontFamily: "productsans",
+        scaffoldBackgroundColor: blue1,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 7,
@@ -31,7 +36,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: quizscreen(),
+      home: homePage(),
+      // home: resultScreen(),
+      // home: quizscreen(),
     );
   }
 }

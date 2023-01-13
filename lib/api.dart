@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:quizapp/models/questionmodel.dart';
 
-Future getquestions() async {
-  var params = {
-    'amount': '10',
-    'category': '28',
-    'difficulty': 'medium',
-    'type': 'multiple',
-  };
+Future getquestions(params) async {
+  // var params = {
+  //   'amount': '10',
+  //   'category': '28',
+  //   'difficulty': 'medium',
+  //   'type': 'multiple',
+  // };
   final uri = Uri.https('opentdb.com', 'api.php', params); // making uri
 
   print("start");
