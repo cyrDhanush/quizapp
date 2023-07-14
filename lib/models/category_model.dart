@@ -5,9 +5,16 @@ class CategoryModel {
 
   CategoryModel(
       {required this.id, required this.iconfile, required this.title});
+
+  printer() {
+    print(iconfile);
+    print(title);
+    print(id);
+  }
 }
 
-CategoryModel findcategoryobject(String title) {
+CategoryModel findCategory({required String title}) {
+  // to find the category object with title
   for (CategoryModel i in categorylist) {
     if (title == i.title) {
       return i;

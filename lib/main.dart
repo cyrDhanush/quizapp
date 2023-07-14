@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/global.dart';
+import 'package:quizapp/screens/blankpage.dart';
 import 'package:quizapp/screens/homepage.dart';
 import 'package:quizapp/screens/quizscreen.dart';
 import 'package:flutter/services.dart';
@@ -36,9 +37,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: homePage(),
+      // home: homePage(),
       // home: resultScreen(),
-      // home: quizscreen(),
+      home: quizscreen(),
     );
   }
 }

@@ -2,51 +2,30 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:quizapp/models/questionmodel.dart';
+import 'package:quizapp/screens/blankpage.dart';
 
-Future getquestions(params) async {
-  // var params = {
-  //   'amount': '10',
-  //   'category': '28',
-  //   'difficulty': 'medium',
-  //   'type': 'multiple',
-  // };
+Future<List<QuestionModel>> getQuestions({Map<String, dynamic>? params}) async {
+  if (params == null) {
+    params = {
+      'amount': '10',
+      'category': '28',
+      'difficulty': 'medium',
+      'type': 'multiple'
+    };
+  }
+
   final uri = Uri.https('opentdb.com', 'api.php', params); // making uri
+  // final response = await http.get(uri); //getting response with uri
 
-  print("start");
-  final response = await http.get(
-    uri,
-    headers: {"Accept": "application/json"},
-  ); //getting response with uri
-
-  var decoded = jsonDecode(response.body); // response is decoded
-
-  List resultlist = decoded['results']; //response to list
-
-  List<Questionapimodel> apiobjects = [];
-
-  //converting json into questionapimodel
-  for (var i in resultlist) {
-    Questionapimodel m = fromjson(i);
-    apiobjects.add(m);
+  // var decodedjson = jsonDecode(response.body); // response is decoded
+  var decodedjson = jsonDecode(sampleresponse);
+  List resultlist = decodedjson['results']; //response to list
+  List<QuestionModel> questions = [];
+  for (Map<String, dynamic> map in resultlist) {
+    questions.add(QuestionModel.fromMap(questionmap: map));
   }
-
-  //converting questionapimodel into questionmodel
-  List<Questionmodel> questionmodelobj = [];
-  for (Questionapimodel items in apiobjects) {
-    questionmodelobj.add(items.convertomodel());
+  for (QuestionModel questionModel in questions) {
+    questionModel.printer();
   }
-
-  // for (Questionmodel i in questionmodelobj) {
-  //   i.printer();
-  // }
-  return questionmodelobj;
-}
-
-fromjson(jsno) {
-  Questionapimodel model = Questionapimodel();
-  model.category = jsno['category'];
-  model.question = jsno['question'];
-  model.correct_answer = jsno['correct_answer'];
-  model.otheroptions = jsno['incorrect_answers'];
-  return model;
+  return questions;
 }

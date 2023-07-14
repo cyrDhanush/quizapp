@@ -5,10 +5,10 @@ import 'package:quizapp/models/questionmodel.dart';
 import 'package:quizapp/screens/resultScreen.dart';
 
 class quizscreen extends StatefulWidget {
-  final Map<String, dynamic> params;
+  final Map<String, dynamic>? params;
   const quizscreen({
     Key? key,
-    required this.params,
+    this.params,
   }) : super(key: key);
 
   @override
@@ -22,14 +22,12 @@ class _quizscreenState extends State<quizscreen> {
   double quizcontaineropacity = 1;
   late int maxpages;
   //
-  List<Questionmodel> questionlist = [];
+  List<QuestionModel> questionlist = [];
 
   getdata() async {
-    questionlist = await getquestions(widget.params);
-
-    setState(() {
-      maxpages = questionlist.length;
-    });
+    List<QuestionModel> questions = await getQuestions(params: widget.params);
+    questionlist = questions;
+    maxpages = questionlist.length;
   }
 
   prevpage() async {
@@ -141,14 +139,14 @@ class _quizscreenState extends State<quizscreen> {
                       borderRadius: BorderRadius.circular(30),
                       child: ImageIcon(
                         AssetImage('assets/icons/category_selection/' +
-                            questionlist[currentpage].categoryobj.iconfile),
+                            questionlist[currentpage].categoryobj!.iconfile),
                         color: orange,
                         size: 10,
                       ),
                     ),
                   ),
                   title: Text(
-                    questionlist[currentpage].categoryobj.title,
+                    questionlist[currentpage].categoryobj!.title,
                     style: appbartext,
                   ),
                   actions: [
@@ -250,6 +248,9 @@ class _quizscreenState extends State<quizscreen> {
                         ),
                       ),
                       // controll buttons
+                      SizedBox(
+                        height: 10,
+                      ),
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -323,16 +324,7 @@ class _quizscreenState extends State<quizscreen> {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => resultScreen(
-                                    //       questionlist: questionlist,
-                                    //     ),
-                                    //   ),
-                                    // );
-                                  },
+                                  onPressed: () {},
                                   child: Container(
                                     alignment: Alignment.center,
                                     height: 50,
@@ -361,7 +353,7 @@ String sampletext =
     "What part of an automobile engine uses lobes to open and close intake and exhaust valves, and allows an air/fuel mixture into the engine?";
 
 class quizlayout extends StatefulWidget {
-  final Questionmodel object;
+  final QuestionModel object;
   final int questionno;
   const quizlayout({Key? key, required this.object, this.questionno = 1})
       : super(key: key);
@@ -374,34 +366,32 @@ class _quizlayoutState extends State<quizlayout> {
   List optionalphabet = ['A', 'B', 'C', 'D'];
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          widget.questionno.toString() + ". " + widget.object.question,
-          style: quizquestion,
-        ),
-        SizedBox(
-          height: 25,
-        ),
-        Expanded(
-          child: Container(
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  for (int i = 0; i < widget.object.alloptions.length; i++)
-                    optionbutton(answer: widget.object.alloptions[i], id: i),
-                ],
-              ),
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            widget.questionno.toString() + ". " + widget.object.question,
+            style: quizquestion,
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Container(
+            child: Column(
+              children: [
+                for (int i = 0; i < widget.object.allanswers!.length; i++)
+                  optionbutton(answer: widget.object.allanswers![i], id: i),
+              ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
