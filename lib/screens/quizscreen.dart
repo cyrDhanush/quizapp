@@ -5,15 +5,11 @@ import 'package:quizapp/models/questionmodel.dart';
 import 'package:quizapp/screens/resultScreen.dart';
 
 class quizscreen extends StatefulWidget {
-  final String topicid;
-  final int question;
-  final String difficulty;
-  const quizscreen(
-      {Key? key,
-      this.topicid = 'any',
-      this.question = 10,
-      this.difficulty = 'any'})
-      : super(key: key);
+  final Map<String, dynamic> params;
+  const quizscreen({
+    Key? key,
+    required this.params,
+  }) : super(key: key);
 
   @override
   State<quizscreen> createState() => _quizscreenState();
@@ -29,48 +25,11 @@ class _quizscreenState extends State<quizscreen> {
   List<Questionmodel> questionlist = [];
 
   getdata() async {
-    var params = <String, dynamic>{};
-    params.putIfAbsent('amount', () => widget.question.toString());
-    params.putIfAbsent('type', () => 'multiple');
-    if (widget.difficulty != 'any') {
-      params.putIfAbsent('difficulty', () => widget.difficulty);
-    }
-    if (widget.topicid != 'any') {
-      params.putIfAbsent('category', () => widget.topicid);
-    }
-    questionlist = await getquestions(params);
-    // questionlist = [
-    //   Questionmodel(
-    //     "samplecategory",
-    //     "This is the question and a big sentence",
-    //     "The Correct Answer",
-    //     ["Wrong 1", "Wrong 2", "Wrong 3"],
-    //     ["Wrong 1", "Wrong 2", "Wrong 3", "The Correct Answer"],
-    //   ),
-    //   Questionmodel(
-    //     "samplecategory",
-    //     "This is the question and a big sentence",
-    //     "The Correct Answer",
-    //     ["Wrong 1", "Wrong 2", "Wrong 3"],
-    //     ["asd 1", "The Correct Answer", "Wrong 3", "Wrong 3"],
-    //   ),
-    //   Questionmodel(
-    //     "samplecategory",
-    //     "This is the question and a big sentence",
-    //     "The Correct Answer",
-    //     ["Wrong 1", "Wrong 2", "Wrong 3"],
-    //     ["Wroang 1", "The Correct Answer", "Wraaong 2", "Wrasdfong 3"],
-    //   ),
-    // ];
+    questionlist = await getquestions(widget.params);
+
     setState(() {
       maxpages = questionlist.length;
     });
-  }
-
-  printanswers() {
-    for (Questionmodel i in questionlist) {
-      print(i.user_answer);
-    }
   }
 
   prevpage() async {
@@ -220,7 +179,7 @@ class _quizscreenState extends State<quizscreen> {
                           ),
                           Text(
                             (currentpage + 1).toString() +
-                                ' / ' +
+                                ' of ' +
                                 questionlist.length.toString(),
                             style: quizmeta,
                           ),
@@ -238,11 +197,7 @@ class _quizscreenState extends State<quizscreen> {
                           ),
                         ],
                       ),
-                      // Divider(
-                      //   color: lightcolor,
-                      //   thickness: 1.5,
-                      //   height: 20,
-                      // ),
+                      // question progress bar
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 10),
                         child: Stack(
@@ -250,7 +205,7 @@ class _quizscreenState extends State<quizscreen> {
                           children: [
                             Container(
                               height: 3,
-                              width: MediaQuery.of(context).size.width,
+                              width: MediaQuery.of(context).size.width - 30,
                               decoration: BoxDecoration(
                                 color: lightcolor,
                                 borderRadius: BorderRadius.circular(16),
@@ -262,7 +217,8 @@ class _quizscreenState extends State<quizscreen> {
                                 duration: Duration(milliseconds: 1000),
                                 curve: Curves.fastLinearToSlowEaseIn,
                                 height: 3,
-                                width: MediaQuery.of(context).size.width *
+                                width: (MediaQuery.of(context).size.width -
+                                        30) *
                                     ((currentpage + 1) / questionlist.length),
                                 decoration: BoxDecoration(
                                   color: orange,
@@ -274,31 +230,26 @@ class _quizscreenState extends State<quizscreen> {
                         ),
                       ),
                       Expanded(
-                        child: SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 600,
-                            child: AnimatedOpacity(
-                              duration: Duration(milliseconds: 100),
-                              opacity: quizcontaineropacity,
-                              child: PageView(
-                                controller: pageController,
-                                physics: NeverScrollableScrollPhysics(),
-                                children: [
-                                  // for (Questionmodel i in questionlist)
-                                  //   quizlayout(object: i),
-                                  for (int i = 0; i < questionlist.length; i++)
-                                    quizlayout(
-                                      object: questionlist[i],
-                                      questionno: i + 1,
-                                    ),
-                                ],
-                              ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: AnimatedOpacity(
+                            duration: Duration(milliseconds: 100),
+                            opacity: quizcontaineropacity,
+                            child: PageView(
+                              controller: pageController,
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                for (int i = 0; i < questionlist.length; i++)
+                                  quizlayout(
+                                    object: questionlist[i],
+                                    questionno: i + 1,
+                                  ),
+                              ],
                             ),
                           ),
                         ),
                       ),
+                      // controll buttons
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -423,26 +374,34 @@ class _quizlayoutState extends State<quizlayout> {
   List optionalphabet = ['A', 'B', 'C', 'D'];
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 20,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          widget.questionno.toString() + ". " + widget.object.question,
+          style: quizquestion,
+        ),
+        SizedBox(
+          height: 25,
+        ),
+        Expanded(
+          child: Container(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  for (int i = 0; i < widget.object.alloptions.length; i++)
+                    optionbutton(answer: widget.object.alloptions[i], id: i),
+                ],
+              ),
+            ),
           ),
-          Text(
-            widget.questionno.toString() + ". " + widget.object.question,
-            style: quizquestion,
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          for (int i = 0; i < widget.object.alloptions.length; i++)
-            optionbutton(answer: widget.object.alloptions[i], id: i),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

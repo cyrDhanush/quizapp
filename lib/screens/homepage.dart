@@ -144,13 +144,17 @@ class _homePageState extends State<homePage> {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'quizscreen',
         onPressed: () {
+          Map<String, dynamic> params = {
+            'type': 'multiple',
+          };
+          params.putIfAbsent('amount', () => questions.toInt());
+          params.putIfAbsent('difficulty', () => difficulty_level);
+          params.putIfAbsent('category', () => topicid);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => quizscreen(
-                question: questions.toInt(),
-                topicid: topicid,
-                difficulty: difficulty_level,
+                params: params,
               ),
             ),
           );

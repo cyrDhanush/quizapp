@@ -30,10 +30,10 @@ class Questionmodel {
   String category;
   CategoryModel categoryobj;
   String question;
-  String correct_answer;
-  List otheroptions;
-  List<String> alloptions = [];
-  String user_answer = "";
+  String correct_answer; // correct answer
+  List otheroptions; // options other than correct answer
+  List<String> alloptions = []; // options including answer
+  String user_answer = ""; // user opted answer
 
   Questionmodel(
     this.category,
