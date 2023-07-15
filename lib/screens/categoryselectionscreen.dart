@@ -5,14 +5,15 @@ import 'package:quizapp/models/category_model.dart';
 import 'package:quizapp/screens/quizscreen.dart';
 import 'package:quizapp/widgets/topictile.dart';
 
-class homePage extends StatefulWidget {
-  const homePage({Key? key}) : super(key: key);
+class CategorySelectionScreen extends StatefulWidget {
+  const CategorySelectionScreen({Key? key}) : super(key: key);
 
   @override
-  State<homePage> createState() => _homePageState();
+  State<CategorySelectionScreen> createState() =>
+      _CategorySelectionScreenState();
 }
 
-class _homePageState extends State<homePage> {
+class _CategorySelectionScreenState extends State<CategorySelectionScreen> {
   double questions = 10;
   String topicid = "any";
   String difficulty_level = 'any';
@@ -153,7 +154,7 @@ class _homePageState extends State<homePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => quizscreen(
+              builder: (context) => QuizScreen(
                 params: params,
               ),
             ),

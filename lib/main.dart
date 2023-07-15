@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizapp/global.dart';
 import 'package:quizapp/screens/blankpage.dart';
-import 'package:quizapp/screens/homepage.dart';
+import 'package:quizapp/screens/categoryselectionscreen.dart';
 import 'package:quizapp/screens/quizscreen.dart';
 import 'package:flutter/services.dart';
 import 'package:quizapp/screens/resultScreen.dart';
@@ -37,9 +37,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      // home: homePage(),
+      home: CategorySelectionScreen(),
       // home: resultScreen(),
-      home: quizscreen(),
+      // home: QuizScreen(),
     );
   }
 }

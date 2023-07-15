@@ -2,32 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:quizapp/api.dart';
 import 'package:quizapp/global.dart';
 import 'package:quizapp/models/questionmodel.dart';
+import 'package:quizapp/screens/loadingscreen.dart';
 import 'package:quizapp/screens/resultScreen.dart';
 
-class quizscreen extends StatefulWidget {
+class QuizScreen extends StatefulWidget {
   final Map<String, dynamic>? params;
-  const quizscreen({
+  const QuizScreen({
     Key? key,
     this.params,
   }) : super(key: key);
 
   @override
-  State<quizscreen> createState() => _quizscreenState();
+  State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _quizscreenState extends State<quizscreen> {
-  //
+class _QuizScreenState extends State<QuizScreen> {
+  late DateTime startedTime;
   late PageController pageController;
   int currentpage = 0;
   double quizcontaineropacity = 1;
   late int maxpages;
-  //
   List<QuestionModel> questionlist = [];
 
   getdata() async {
     List<QuestionModel> questions = await getQuestions(params: widget.params);
     questionlist = questions;
     maxpages = questionlist.length;
+    setState(() {});
   }
 
   prevpage() async {
@@ -66,11 +67,28 @@ class _quizscreenState extends State<quizscreen> {
     }
   }
 
+  Stream<String> durationCalculator() async* {
+    Duration duration = DateTime.now().difference(startedTime);
+    String mins = duration.inMinutes.toString();
+    String seconds = (duration.inSeconds % 60).toString();
+    if (mins.length == 1) mins = '0$mins';
+    if (seconds.length == 1) seconds = '0$seconds';
+    yield mins + ' : ' + seconds;
+    setState(() {});
+  }
+
+  onSubmit() async {
+    for (QuestionModel questionModel in questionlist) {
+      questionModel.printer();
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     pageController = PageController();
+    startedTime = DateTime.now();
     getdata();
   }
 
@@ -86,47 +104,7 @@ class _quizscreenState extends State<quizscreen> {
     return Hero(
         tag: "quizscreen",
         child: (questionlist.length == 0)
-            ? (Scaffold(
-                //loading screen
-                backgroundColor: blue1,
-                body: Center(
-                  child: Card(
-                    color: blue2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    elevation: 10,
-                    margin: EdgeInsets.all(0),
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: blue2,
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          CircularProgressIndicator(
-                            color: orange,
-                            backgroundColor: blue1,
-                          ),
-                          Text(
-                            "Loading",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ))
+            ? (LoadingScreen())
             : (Scaffold(
                 backgroundColor: blue1,
                 appBar: AppBar(
@@ -182,9 +160,15 @@ class _quizscreenState extends State<quizscreen> {
                             style: quizmeta,
                           ),
                           Spacer(),
-                          Text(
-                            "03:00",
-                            style: quizmeta,
+                          StreamBuilder(
+                            stream: durationCalculator(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(snapshot.data!, style: quizmeta);
+                              } else {
+                                return Text('00 : 00', style: quizmeta);
+                              }
+                            },
                           ),
                           SizedBox(
                             width: 5,
@@ -324,7 +308,9 @@ class _quizscreenState extends State<quizscreen> {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    onSubmit();
+                                  },
                                   child: Container(
                                     alignment: Alignment.center,
                                     height: 50,
@@ -363,7 +349,7 @@ class quizlayout extends StatefulWidget {
 }
 
 class _quizlayoutState extends State<quizlayout> {
-  List optionalphabet = ['A', 'B', 'C', 'D'];
+  List optionalphabet = ['A', 'B', 'C', 'D', 'E', 'F'];
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -401,7 +387,7 @@ class _quizlayoutState extends State<quizlayout> {
       onTap: () {
         if (widget.object.user_answer == answer) {
           setState(() {
-            widget.object.user_answer = "";
+            widget.object.user_answer = null;
           });
         } else {
           setState(() {
@@ -426,7 +412,8 @@ class _quizlayoutState extends State<quizlayout> {
           children: [
             AnimatedOpacity(
               opacity: (selected) ? (0) : (1),
-              duration: Duration(milliseconds: 100),
+              duration: Duration(milliseconds: 300),
+              curve: Curves.fastLinearToSlowEaseIn,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
@@ -434,7 +421,7 @@ class _quizlayoutState extends State<quizlayout> {
                 elevation: 15,
                 margin: EdgeInsets.all(0),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: 100),
+                  duration: Duration(milliseconds: 300),
                   curve: Curves.fastLinearToSlowEaseIn,
                   height: (selected) ? (0) : (46),
                   width: (selected) ? (0) : (46),
@@ -470,7 +457,8 @@ class _quizlayoutState extends State<quizlayout> {
             ),
             AnimatedOpacity(
               opacity: (selected) ? (1) : (0),
-              duration: Duration(milliseconds: 100),
+              duration: Duration(milliseconds: 300),
+              curve: Curves.fastLinearToSlowEaseIn,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),

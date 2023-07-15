@@ -60,7 +60,8 @@ class QuestionModel {
   }
 
   printer() {
-    print(this.category);
-    this.categoryobj!.printer();
+    print(this.allanswers);
+    print(this.correct_answer);
+    print(this.user_answer ?? ' answer not yet selected');
   }
 }
