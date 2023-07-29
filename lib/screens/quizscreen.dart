@@ -23,6 +23,7 @@ class _QuizScreenState extends State<QuizScreen> {
   double quizcontaineropacity = 1;
   late int maxpages;
   List<QuestionModel> questionlist = [];
+  String duration = '00 : 00';
 
   getdata() async {
     print('sneding');
@@ -30,6 +31,7 @@ class _QuizScreenState extends State<QuizScreen> {
     print(questions.length);
     questionlist = questions;
     maxpages = questionlist.length;
+    startedTime = DateTime.now();
     setState(() {});
   }
 
@@ -75,6 +77,7 @@ class _QuizScreenState extends State<QuizScreen> {
     String seconds = (duration.inSeconds % 60).toString();
     if (mins.length == 1) mins = '0$mins';
     if (seconds.length == 1) seconds = '0$seconds';
+    this.duration = mins + ' : ' + seconds;
     yield mins + ' : ' + seconds;
     setState(() {});
   }
@@ -83,6 +86,15 @@ class _QuizScreenState extends State<QuizScreen> {
     for (QuestionModel questionModel in questionlist) {
       questionModel.printer();
     }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => resultScreen(
+          questionlist: questionlist,
+          duration: this.duration,
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,7 +102,7 @@ class _QuizScreenState extends State<QuizScreen> {
     // TODO: implement initState
     super.initState();
     pageController = PageController();
-    startedTime = DateTime.now();
+
     getdata();
   }
 
