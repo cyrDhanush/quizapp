@@ -15,17 +15,13 @@ Future<List<QuestionModel>> getQuestions({Map<String, dynamic>? params}) async {
   }
 
   final uri = Uri.https('opentdb.com', 'api.php', params); // making uri
-  // final response = await http.get(uri); //getting response with uri
-
-  // var decodedjson = jsonDecode(response.body); // response is decoded
-  var decodedjson = jsonDecode(sampleresponse);
+  final response = await http.get(uri); //getting response with uri
+  print(response.reasonPhrase);
+  var decodedjson = jsonDecode(response.body); // response is decoded
   List resultlist = decodedjson['results']; //response to list
   List<QuestionModel> questions = [];
   for (Map<String, dynamic> map in resultlist) {
     questions.add(QuestionModel.fromMap(questionmap: map));
-  }
-  for (QuestionModel questionModel in questions) {
-    questionModel.printer();
   }
   return questions;
 }

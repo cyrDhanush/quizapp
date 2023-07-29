@@ -1,31 +1,5 @@
 import 'package:quizapp/models/category_model.dart';
 
-// class Questionapimodel {
-//   String category = "";
-//   String question = "";
-//   String correct_answer = "";
-//   List otheroptions = [];
-//
-//   // Questionmodel convertomodel() {
-//   //   List<String> templist = [];
-//   //
-//   //   for (String i in otheroptions) {
-//   //     templist.add(i);
-//   //   }
-//   //   templist.add(correct_answer);
-//   //   templist.shuffle();
-//   //   List<String> alloptions = templist;
-//   //   return Questionmodel(category, findcategoryobject(category), question,
-//   //       correct_answer, otheroptions, alloptions);
-//   // }
-//
-//   printer() {
-//     print(question);
-//     print(correct_answer);
-//     print(otheroptions);
-//   }
-// }
-
 class QuestionModel {
   String? category;
   CategoryModel? categoryobj;

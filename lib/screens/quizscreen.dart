@@ -25,7 +25,9 @@ class _QuizScreenState extends State<QuizScreen> {
   List<QuestionModel> questionlist = [];
 
   getdata() async {
+    print('sneding');
     List<QuestionModel> questions = await getQuestions(params: widget.params);
+    print(questions.length);
     questionlist = questions;
     maxpages = questionlist.length;
     setState(() {});

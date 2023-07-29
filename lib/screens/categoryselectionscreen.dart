@@ -148,9 +148,13 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen> {
           Map<String, dynamic> params = {
             'type': 'multiple',
           };
-          params.putIfAbsent('amount', () => questions.toInt());
-          params.putIfAbsent('difficulty', () => difficulty_level);
-          params.putIfAbsent('category', () => topicid);
+          if (difficulty_level != 'any') {
+            params.putIfAbsent('difficulty', () => difficulty_level);
+          }
+          if (topicid != 'any') params.putIfAbsent('category', () => topicid);
+
+          params.putIfAbsent('amount', () => questions.toInt().toString());
+
           Navigator.push(
             context,
             MaterialPageRoute(
