@@ -53,7 +53,7 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen> {
               inactiveColor: blue2,
               value: questions,
               min: 5,
-              max: 25,
+              max: 20,
               divisions: 4,
               label: (questions.toInt()).toString(),
               onChanged: (a) {
@@ -75,7 +75,7 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen> {
                   ),
                   Spacer(),
                   Text(
-                    "25",
+                    "20",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

@@ -142,6 +142,7 @@ class _resultScreenState extends State<resultScreen> {
                   child: Column(
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Text(
@@ -149,6 +150,38 @@ class _resultScreenState extends State<resultScreen> {
                                   '. ' +
                                   widget.questionlist![i].question,
                               style: quizquestion,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            height: 5,
+                            width: 5,
+                            decoration: BoxDecoration(
+                              color:
+                                  (widget.questionlist![i].user_answer == null)
+                                      ? (Colors.white)
+                                      : ((widget.questionlist![i].user_answer ==
+                                              widget.questionlist![i]
+                                                  .correct_answer)
+                                          ? (Colors.green)
+                                          : (Colors.red)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: (widget.questionlist![i].user_answer ==
+                                          null)
+                                      ? (Colors.white)
+                                      : ((widget.questionlist![i].user_answer ==
+                                              widget.questionlist![i]
+                                                  .correct_answer)
+                                          ? (Colors.green)
+                                          : (Colors.red)),
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(100),
                             ),
                           ),
                         ],
@@ -169,7 +202,8 @@ class _resultScreenState extends State<resultScreen> {
                                   widget.questionlist![i].correct_answer,
                               wronganswer:
                                   widget.questionlist![i].incorrect_answers,
-                              useranswer: widget.questionlist![i].user_answer!,
+                              useranswer:
+                                  widget.questionlist![i].user_answer ?? '',
                               currentanswer:
                                   widget.questionlist![i].allanswers![j],
                             ).withAlpha(20),
@@ -181,7 +215,7 @@ class _resultScreenState extends State<resultScreen> {
                                 wronganswer:
                                     widget.questionlist![i].incorrect_answers,
                                 useranswer:
-                                    widget.questionlist![i].user_answer!,
+                                    widget.questionlist![i].user_answer ?? '',
                                 currentanswer:
                                     widget.questionlist![i].allanswers![j],
                               ),
